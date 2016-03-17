@@ -1,9 +1,9 @@
 package algorithms;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by SoBoLp on 3/16/16.
@@ -61,20 +61,24 @@ public class bfsshortreach {
 
         public Integer bfsDist(Node start, Node goal) {
             HashMap<Node, Node> parent = new HashMap<>();
+            HashMap<Node, Integer> dist = new HashMap<>();
             LinkedList<Node> queue = new LinkedList<>();
             HashSet<Node> visited = new HashSet<>();
             queue.add(start);
             visited.add(start);
+            Integer distToNext = 0;
             while (!queue.isEmpty()) {
                 Node curr = queue.removeFirst();
                 if (curr == goal) {
                     // return path
                     return getPathDist(parent, goal);
                 }
+                distToNext +=6;
                 for (Node neighbor : curr.getNeigbors()) {
                     if (!visited.contains(neighbor)) {
                         visited.add(neighbor);
                         parent.put(neighbor, curr);
+                        dist.put(neighbor,distToNext);
                         queue.add(neighbor);
                     }
                 }
@@ -82,6 +86,28 @@ public class bfsshortreach {
             return null;
         }
 
+        public HashMap<Node, Integer> bfsDist(Node start) {
+            HashMap<Node, Integer> dist = new HashMap<>();
+            LinkedList<Node> queue = new LinkedList<>();
+            HashSet<Node> visited = new HashSet<>();
+            queue.add(start);
+            visited.add(start);
+            Integer distToNext = 6;
+            while (!queue.isEmpty()) {
+                Node curr = queue.removeFirst();
+                if (!curr.equals(start))
+                    distToNext = dist.get(curr) + 6;
+                for (Node neighbor : curr.getNeigbors()) {
+                    if (!visited.contains(neighbor)) {
+                        visited.add(neighbor);
+                        if (!dist.containsKey(neighbor))
+                            dist.put(neighbor,distToNext);
+                        queue.add(neighbor);
+                    }
+                }
+            }
+            return dist;
+        }
         private Integer getPathDist(HashMap<Node, Node> parent, Node goal) {
             Integer result = 0;
             Node curr = goal;
@@ -140,6 +166,19 @@ public class bfsshortreach {
             }
             return result;
         }
+        public List<Integer> getBfsToAllNaigb(Node start) {
+            List<Integer> result = new ArrayList<>();
+            HashMap<Node,Integer> distToNaigb = bfsDist(start);
+            for (int i = 0; i < nodeSet.size(); i++) {
+                Node curr = nodeSet.get(i);
+                if (curr != start) {
+                    if (distToNaigb.containsKey(curr))
+                        result.add(distToNaigb.get(curr));
+                    else result.add(-1);
+                }
+            }
+            return result;
+        }
     }
 
 
@@ -153,7 +192,8 @@ public class bfsshortreach {
         }
 
         public void addEdge(Edge next) {
-            edgeHashMap.put(next.getEnd(), next);
+            if (!edgeHashMap.containsKey(next.getEnd()))
+                edgeHashMap.put(next.getEnd(), next);
         }
 
         public int getNumEdges() {
@@ -193,18 +233,6 @@ public class bfsshortreach {
             return length;
         }
     }
-    public static  ArrayList<String> getTokens(String pattern,String text)
-    {
-        ArrayList<String> tokens = new ArrayList<String>();
-        Pattern tokSplitter = Pattern.compile(pattern);
-        Matcher m = tokSplitter.matcher(text);
-
-        while (m.find()) {
-            tokens.add(m.group());
-        }
-
-        return tokens;
-    }
 
     public static void main(String[] args) {
         BufferedReader in1 = new BufferedReader(new InputStreamReader(System.in));
@@ -215,23 +243,23 @@ public class bfsshortreach {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        numTests = Integer.parseInt(getTokens("\\S+",next).get(0));
-        Graph[] testCasegr = new Graph[numTests];
+        numTests = Integer.parseInt(next.split(" ")[0]);
+        Graph testCasegr;
         List<String> result = new ArrayList<>();
         int[] arrS = new int[numTests];
         for (int tc = 0; tc < numTests; tc++) {
-            testCasegr[tc] = new Graph();
+            testCasegr = new Graph();
 
             try {
                 next = in1.readLine();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            List<String> arr = getTokens("\\S+",next);
-            int N = Integer.parseInt(arr.get(0));
-            int M = Integer.parseInt(arr.get(1));
+            String[] arr = next.split(" ");
+            int N = Integer.parseInt(arr[0]);
+            int M = Integer.parseInt(arr[1]);
             for (int i = 0; i < N; i++) {
-                testCasegr[tc].addVertex(new Node(i + 1));
+                testCasegr.addVertex(new Node(i + 1));
             }
             for (int i = 0; i < M; i++) {
                 try {
@@ -239,16 +267,23 @@ public class bfsshortreach {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                List<String> arr1 = getTokens("\\S+",next);
-                testCasegr[tc].addEdge(testCasegr[tc].getVertex(Integer.parseInt(arr1.get(0)))
-                        , testCasegr[tc].getVertex(Integer.parseInt(arr1.get(1))));
+                String[] arr1 = next.split(" ");
+                testCasegr.addEdge(testCasegr.getVertex(Integer.parseInt(arr1[0]))
+                        , testCasegr.getVertex(Integer.parseInt(arr1[1])));
             }
             try {
                 next = in1.readLine();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            arrS[tc] = Integer.parseInt(getTokens("\\S+",next).get(0));
+            arrS[tc] = Integer.parseInt(next.split(" ")[0]);
+            StringBuilder sb = new StringBuilder();
+//                for (Integer i : testCasegr.getBfsToAll(testCasegr.getVertex(arrS[tc]))) {
+            for (Integer i : testCasegr.getBfsToAllNaigb(testCasegr.getVertex(arrS[tc]))) {
+                    if (i != 0)
+                        sb.append(i + " ");
+                }
+                result.add(sb.toString());
 
         }
 /*
@@ -281,14 +316,7 @@ public class bfsshortreach {
         }
 */
 
-        for (int tc = 0; tc < numTests; tc++) {
-            StringBuilder sb = new StringBuilder();
-            for (Integer i : testCasegr[tc].getBfsToAll(testCasegr[tc].getVertex(arrS[tc]))) {
-                if (i != 0)
-                    sb.append(i + " ");
-            }
-            result.add(sb.toString());
-        }
+
         for (String s : result) {
             System.out.println(s);
         }
