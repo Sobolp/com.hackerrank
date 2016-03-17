@@ -11,6 +11,106 @@ import java.util.*;
 public class bfsshortreach {
 
 
+    public static void main(String[] args) {
+        BufferedReader in1 = new BufferedReader(new InputStreamReader(System.in));
+        int numTests = 0;
+        String next = "";
+        try {
+            next = in1.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        numTests = Integer.parseInt(next.split(" ")[0]);
+        Graph testCasegr;
+        List<String> result = new ArrayList<>();
+        int[] arrS = new int[numTests];
+        for (int tc = 0; tc < numTests; tc++) {
+            testCasegr = new Graph();
+
+            try {
+                next = in1.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String[] arr = next.split(" ");
+            int N = Integer.parseInt(arr[0]);
+            int M = Integer.parseInt(arr[1]);
+            for (int i = 0; i < N; i++) {
+                testCasegr.addVertex(new Node(i + 1));
+            }
+            for (int i = 0; i < M; i++) {
+                try {
+                    next = in1.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String[] arr1 = next.split(" ");
+                testCasegr.addEdge(testCasegr.getVertex(Integer.parseInt(arr1[0]))
+                        , testCasegr.getVertex(Integer.parseInt(arr1[1])));
+            }
+            try {
+                next = in1.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            arrS[tc] = Integer.parseInt(next.split(" ")[0]);
+            StringBuilder sb = new StringBuilder();
+//                for (Integer i : testCasegr.getBfsToAll(testCasegr.getVertex(arrS[tc]))) {
+            for (Integer i : testCasegr.getBfsToAllNaigb(testCasegr.getVertex(arrS[tc]))) {
+                    if (i != 0)
+                        sb.append(i + " ");
+                }
+                result.add(sb.toString());
+
+        }
+/*
+
+        Scanner in = new Scanner(System.in);
+        if (args.length > 0) {
+            File inFile = new File(args[0]);
+            try {
+                in = new Scanner(inFile);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        int numTests = in.nextInt();
+        Graph[] testCasegr = new Graph[numTests];
+        List<String> result = new ArrayList<>();
+        int[] arrS = new int[numTests];
+        for (int tc = 0; tc < numTests; tc++) {
+            testCasegr[tc] = new Graph();
+            int N = in.nextInt();
+            int M = in.nextInt();
+            for (int i = 0; i < N; i++) {
+                testCasegr[tc].addVertex(new Node(i + 1));
+            }
+            for (int i = 0; i < M; i++) {
+                testCasegr[tc].addEdge(testCasegr[tc].getVertex(in.nextInt()), testCasegr[tc].getVertex(in.nextInt()));
+            }
+            arrS[tc] = in.nextInt();
+
+        }
+*/
+
+
+        for (String s : result) {
+            System.out.println(s);
+        }
+        /*
+        tastCase:
+        2
+        4 2
+        1 2
+        1 3
+        1
+        3 1
+        2 3
+        2
+*/
+//        ./txt/bfsshortreach/input05.txt
+    }
+
     private static class Graph {
         private List<Node> nodeSet;
         private boolean backRoad = true; // need for consider edge endNode to startNode too (back Road)
@@ -181,7 +281,6 @@ public class bfsshortreach {
         }
     }
 
-
     private static class Node {
         private int name;
         private HashMap<Node, Edge> edgeHashMap;
@@ -210,10 +309,10 @@ public class bfsshortreach {
     }
 
     private static class Edge {
+        static final int DEFAULT_LENGTH = 6;
         private Node start;
         private Node end;
         private int length;
-        static final int DEFAULT_LENGTH = 6;
 
         public Edge(Node start, Node end, int length) {
             this.start = start;
@@ -232,105 +331,5 @@ public class bfsshortreach {
         public int getLength() {
             return length;
         }
-    }
-
-    public static void main(String[] args) {
-        BufferedReader in1 = new BufferedReader(new InputStreamReader(System.in));
-        int numTests = 0;
-        String next = "";
-        try {
-            next = in1.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        numTests = Integer.parseInt(next.split(" ")[0]);
-        Graph testCasegr;
-        List<String> result = new ArrayList<>();
-        int[] arrS = new int[numTests];
-        for (int tc = 0; tc < numTests; tc++) {
-            testCasegr = new Graph();
-
-            try {
-                next = in1.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            String[] arr = next.split(" ");
-            int N = Integer.parseInt(arr[0]);
-            int M = Integer.parseInt(arr[1]);
-            for (int i = 0; i < N; i++) {
-                testCasegr.addVertex(new Node(i + 1));
-            }
-            for (int i = 0; i < M; i++) {
-                try {
-                    next = in1.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                String[] arr1 = next.split(" ");
-                testCasegr.addEdge(testCasegr.getVertex(Integer.parseInt(arr1[0]))
-                        , testCasegr.getVertex(Integer.parseInt(arr1[1])));
-            }
-            try {
-                next = in1.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            arrS[tc] = Integer.parseInt(next.split(" ")[0]);
-            StringBuilder sb = new StringBuilder();
-//                for (Integer i : testCasegr.getBfsToAll(testCasegr.getVertex(arrS[tc]))) {
-            for (Integer i : testCasegr.getBfsToAllNaigb(testCasegr.getVertex(arrS[tc]))) {
-                    if (i != 0)
-                        sb.append(i + " ");
-                }
-                result.add(sb.toString());
-
-        }
-/*
-
-        Scanner in = new Scanner(System.in);
-        if (args.length > 0) {
-            File inFile = new File(args[0]);
-            try {
-                in = new Scanner(inFile);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        int numTests = in.nextInt();
-        Graph[] testCasegr = new Graph[numTests];
-        List<String> result = new ArrayList<>();
-        int[] arrS = new int[numTests];
-        for (int tc = 0; tc < numTests; tc++) {
-            testCasegr[tc] = new Graph();
-            int N = in.nextInt();
-            int M = in.nextInt();
-            for (int i = 0; i < N; i++) {
-                testCasegr[tc].addVertex(new Node(i + 1));
-            }
-            for (int i = 0; i < M; i++) {
-                testCasegr[tc].addEdge(testCasegr[tc].getVertex(in.nextInt()), testCasegr[tc].getVertex(in.nextInt()));
-            }
-            arrS[tc] = in.nextInt();
-
-        }
-*/
-
-
-        for (String s : result) {
-            System.out.println(s);
-        }
-        /*
-        tastCase:
-        2
-        4 2
-        1 2
-        1 3
-        1
-        3 1
-        2 3
-        2
-*/
-//        ./txt/bfsshortreach/input05.txt
     }
 }
