@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * Created by SoBoLp on 3/18/16.
  */
-public class kruskalmstrsub {
+public class KruskalMSTRSub {
 
     public static void main(String[] args) {
         BufferedReader in1 = new BufferedReader(new InputStreamReader(System.in));

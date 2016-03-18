@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * Created by SoBoLp on 3/17/16.
  */
-public class dijkstrashortreach {
+public class DijkstraShortReach {
 
     public static void main(String[] args) {
         BufferedReader in1 = new BufferedReader(new InputStreamReader(System.in));

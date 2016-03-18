@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * Created by SoBoLp on 3/16/16.
  */
-public class bfsshortreach {
+public class BFSShortReach {
 
 
     public static void main(String[] args) {
