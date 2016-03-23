@@ -1,4 +1,4 @@
-package algorithms;
+package GraphTheoryChallenges;
 
 import java.io.BufferedReader;
 import java.io.IOException;

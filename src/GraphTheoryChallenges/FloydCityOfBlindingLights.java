@@ -1,4 +1,4 @@
-package algorithms;
+package GraphTheoryChallenges;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 /**
  * Created by SoBoLp on 3/18/16.
+ *
+ *https://www.hackerrank.com/challenges/floyd-city-of-blinding-lights
+ *
  */
 public class FloydCityOfBlindingLights {
 
