@@ -16,7 +16,6 @@ public class CutTheSticks {
         next = in.readLine();
         int N = Integer.parseInt(next.split(" ")[0]);
         next = in.readLine();
-        String[] arr = next.split(" ");
         String[] arr1 = next.split(" ");
         List<Integer> langhtArr = new ArrayList<>();
         for (int i = 0; i < N; i++) {
