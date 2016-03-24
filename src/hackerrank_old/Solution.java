@@ -1,4 +1,4 @@
-package hackerrank;
+package hackerrank_old;
 
 import java.io.File;
 import java.io.FileNotFoundException;
