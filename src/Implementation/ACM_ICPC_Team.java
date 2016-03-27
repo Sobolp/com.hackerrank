@@ -3,7 +3,9 @@ package Implementation;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 
 /**
@@ -17,9 +19,11 @@ public class ACM_ICPC_Team {
         String[] arr = next.split(" ");
         int N = Integer.parseInt(arr[0]);
         int M = Integer.parseInt(arr[1]);
-        List<String> skills = new ArrayList<>();
+        List<BitSet> skills = new ArrayList<>();
         for (int i = 0; i < N; i++) {
-            skills.add(in.readLine());
+
+            BigInteger binary = new BigInteger(in.readLine(), 2);
+            skills.add(BitSet.valueOf(binary.toByteArray()));
         }
         BinaryMatrix BM = new BinaryMatrix(N, skills);
 //        System.out.println(BM);
@@ -28,50 +32,33 @@ public class ACM_ICPC_Team {
     }
 
     private static class BinaryMatrix {
-        private String[][] matrix;
+        private BitSet[][] matrix;
         private int N;
         private int max = 0;
         private int count = 0;
 
         public BinaryMatrix(int n) {
             N = n;
-            this.matrix = new String[N][N];
+            this.matrix = new BitSet[N][N];
         }
 
-        public BinaryMatrix(int n, List<String> list) {
+        public BinaryMatrix(int n, List<BitSet> list) {
             this(n);
             for (int i = 0; i < n; i++)
                 for (int j = 0; j < n; j++) {
-                    matrix[i][j] = bitwiseOR(list.get(i), list.get(j));
-                    int nextMax = getMax(matrix[i][j]);
-                    if (max < nextMax) {
-                        max = nextMax;
+                    matrix[i][j] = (BitSet) list.get(i).clone();
+                    matrix[i][j].or(list.get(j));
+                    int card = matrix[i][j].cardinality();
+                    if (max < card) {
+                        max = card;
                         count = 1;
-                    } else if (max == getMax(matrix[i][j])) count++;
+                    } else if (max == card) count++;
                 }
         }
 
-        private String bitwiseOR(String A, String B) {
-            StringBuilder SB = new StringBuilder();
-            for (int i = 0; i < A.length(); i++) {
-                int a = Integer.parseInt(Character.toString(A.charAt(i)), 2);
-                int b = Integer.parseInt(Character.toString(B.charAt(i)), 2);
-                int c = a | b;
-                SB.append(Integer.toBinaryString(c));
-            }
-            return SB.toString();
-        }
-
         public int getMax() {
-            return max;
-        }
 
-        private int getMax(String str) {
-            int result = 0;
-            char one = '1';
-            for (char s : str.toCharArray())
-                if (s == '1') result++;
-            return result;
+            return max;
         }
 
         public int getCount() {
