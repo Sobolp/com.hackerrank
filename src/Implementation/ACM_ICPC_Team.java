@@ -17,11 +17,9 @@ public class ACM_ICPC_Team {
         String[] arr = next.split(" ");
         int N = Integer.parseInt(arr[0]);
         int M = Integer.parseInt(arr[1]);
-        List<Long> skills = new ArrayList<>();
+        List<String> skills = new ArrayList<>();
         for (int i = 0; i < N; i++) {
-
-            long binary = Long.parseLong(in.readLine(), 2);
-            skills.add(binary);
+            skills.add(in.readLine());
         }
         BinaryMatrix BM = new BinaryMatrix(N, skills);
 //        System.out.println(BM);
@@ -30,32 +28,48 @@ public class ACM_ICPC_Team {
     }
 
     private static class BinaryMatrix {
-        private long[][] matrix;
+        private String[][] matrix;
         private int N;
-        private long max = 0;
+        private int max = 0;
         private int count = 0;
 
         public BinaryMatrix(int n) {
             N = n;
-            this.matrix = new long[N][N];
+            this.matrix = new String[N][N];
         }
 
-        public BinaryMatrix(int n, List<Long> list) {
+        public BinaryMatrix(int n, List<String> list) {
             this(n);
             for (int i = 0; i < n; i++)
                 for (int j = 0; j < n; j++) {
-                    matrix[i][j] = list.get(i) | list.get(j);
-                    if (max < matrix[i][j]) {
-                        max = matrix[i][j];
+                    matrix[i][j] = bitwiseOR(list.get(i), list.get(j));
+                    int nextMax = getMax(matrix[i][j]);
+                    if (max < nextMax) {
+                        max = nextMax;
                         count = 1;
-                    } else if (max == matrix[i][j]) count++;
+                    } else if (max == getMax(matrix[i][j])) count++;
                 }
         }
 
+        private String bitwiseOR(String A, String B) {
+            StringBuilder SB = new StringBuilder();
+            for (int i = 0; i < A.length(); i++) {
+                int a = Integer.parseInt(Character.toString(A.charAt(i)), 2);
+                int b = Integer.parseInt(Character.toString(B.charAt(i)), 2);
+                int c = a | b;
+                SB.append(Integer.toBinaryString(c));
+            }
+            return SB.toString();
+        }
+
         public int getMax() {
+            return max;
+        }
+
+        private int getMax(String str) {
             int result = 0;
             char one = '1';
-            for (char s : Long.toBinaryString(max).toCharArray())
+            for (char s : str.toCharArray())
                 if (s == '1') result++;
             return result;
         }
